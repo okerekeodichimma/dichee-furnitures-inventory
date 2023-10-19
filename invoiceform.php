@@ -10,12 +10,30 @@ if(isset($_POST['submit'])){
     $customer_name=$_POST['customer_name'];
     $product_name=$_POST['product_name'];
     $quantity_purchased=$_POST['quantity_purchased'];
+    //write query
+    $save_query="INSERT INTO `invoice_tb`(`customer_name`,`product_name`,`quantity_purchased`) VALUES ('$customer_name','$product_name','$quantity_purchased')";
+    
+    //send query to server
+    $send_to_server=mysqli_query($connect,$save_query);
+    $output=mysqli_fetch_assoc($send_to_server);
 
-//write query
-$save_query="INSERT INTO `invoice_tb`(`customer_name`,`product_name`,`quantity_purchased`) VALUES ('$customer_name','$product_name','$quantity_purchased')";
-
-//send query to server
-$send_to_server=mysqli_query($connect,$save_query);
+    //sql query 
+    $update="SELECT `quantity_instock` FROM `inventory_tb` WHERE product_name ='$product_name'";
+    //run the query
+    $run_query=mysqli_query($connect,$update);
+    //receive result
+    $result=mysqli_fetch_assoc($run_query);
+    //print_r($result);
+    //update product quantity
+    $quantity_in_stock=$result['quantity_instock'];
+    $new_qty_in_stock = $quantity_in_stock - $quantity_purchased;
+    
+    
+    $updates = "UPDATE `inventory_tb` SET `quantity_instock`= '$new_qty_in_stock' WHERE product_name='$product_name'";
+    $send=mysqli_query($connect,$updates);
+    $out=mysqli_fetch_assoc($send);
+    //print_r($out);
+}
 
 //check if the data is savedto db
 if($send_to_server){
@@ -24,6 +42,12 @@ if($send_to_server){
     echo'Error to save data'.mysqli_error(($connect));
 }
 
+//Start a session
+session_start();
+
+//Redirect users to login page if they try to access landing page
+if(!$_SESSION['username']){
+    header('Location: login.php');
 }
 ?>
 
@@ -48,6 +72,9 @@ if($send_to_server){
     </style>
 </head>
 <body>
+    <a href="inventorytable.php" class="btn grey black-text">back</a>
+    <a href="logout.php" class="btn grey black-text right">Logout</a>
+    <br>
 <div class="container center-align">
     <img src="img/logo.jpg" width="100vw">
     <h1 class="black white-text">INVOICE FORM</h1>
@@ -55,27 +82,23 @@ if($send_to_server){
         <div class="col s12">
             <form action="invoiceform.php" method="POST">
                <div class="col s12 input-field black-text">
-                    <i class="material-icons prefix">person</i>
                     <input type="text" name='customer_name' required id="customer_name">
                     <label for="customer_name" class="black-text">CUSTOMER NAME:</label>
                 </div>
                 <div class="col s12 input-field black-text">
-                    <i class="material-icons prefix">key</i>
                     <input type="text" name='product_name' required id="product_name">
                     <label for="product_name" class="black-text">PRODUCT NAME:</label>
                 </div>
                 <div class="col s12 input-field black-text">
-                    <i class="material-icons prefix">key</i>
                     <input type="number" name='quantity_purchased' required id="quantity_purchased">
                     <label for="quantity_purchased" class="black-text">PRODUCT QUANTITY:</label>
                 </div>
-                <input type="submit" name='submit' id="submit" required value="submit" class=" black white-text">
+                <input type="submit" name='submit' id="submit" required value="submit" class=" btn black white-text">
                 </div>
             </form>
         </div>
     </div>
-
-   <?php include('templates/footer.php');?> 
+ 
 <script src="js/jquery.js"></script>
 <script src="js/materialize.js"></script> 
 <script>

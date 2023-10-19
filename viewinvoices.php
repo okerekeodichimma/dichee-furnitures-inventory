@@ -13,11 +13,19 @@ include('templates/connect.php');
 
     $furnitures= mysqli_fetch_all($send_query,MYSQLI_ASSOC);
 
+    
     //close the connection
     mysqli_close($connect);
 
     //print_r($furnitures);
 
+       //Start a session
+    session_start();
+
+    //Redirect users to login page if they try to access landing page
+    if(!$_SESSION['username']){
+      header('Location: login.php');
+    }
 
 
 ?>
@@ -31,8 +39,9 @@ include('templates/connect.php');
     <link rel="stylesheet" href="css/materialize.css">
 </head>
 <body>
+    <a href="inventorytable.php" class="btn grey black-text">back</a>
 <div class="right">
-    <a href="logout.php"><button>logout</button></a>
+    <a href="logout.php" class="btn grey black-text right">Logout</a>
 </div>
 
     <h2 class="center-align">INVOICES</h2>
@@ -44,6 +53,7 @@ include('templates/connect.php');
                     <th>CUSTOMER NAME</th>
                     <th>PRODUCT NAME</th>
                     <th>QUANTITY PURCHASED</th>
+                    <th>TOTAL COST</th>
                     
                 </tr>
             </thead>
@@ -54,6 +64,8 @@ include('templates/connect.php');
                     <td><?php echo $furniture['customer_name'] ?></td>
                     <td><?php echo $furniture['product_name'] ?></td>
                     <td><?php echo $furniture['quantity_purchased'] ?></td>
+                    <td><?php echo $furniture['total_cost'] ?></td>
+                    
                 </tr>
             <?php } ?>
         </table>

@@ -51,9 +51,9 @@ if(isset($_POST['login'])){
     }else {
 
         //if username or password is not found set the error variable and the blank_input values
-         $error = 'Wrong username';
-         $userr = $_POST['username'];
-         $pswd = $_POST['password'];
+         $error = 'Wrong username or password';
+         $userr = $_POST['username or password'];
+         $pswd = $_POST['password or password'];
          }
 }
 
@@ -100,17 +100,15 @@ if(isset($_POST['login'])){
             <div class="col s12">
                 <form action="login.php" method="POST">
                     <div class="input-field black-text">
-                        <i class="material-icons prefix">person</i>
                         <input type="text" name='username' id="username">
                         <label for="username" class="black-text">USERNAME:</label>
                     </div>
                     <div class="input-field black-text">
-                        <i class="material-icons prefix">key</i>
                         <input type="password" name='password' id="password">
                         <label for="password" class="black-text">PASSWORD:</label>
                     </div>
                     <div class="center-align">
-                    <input type="submit" name="login" value="login" class="btn btn-flat btn-large black white-text">
+                    <input type="submit" name="login" value="login" class="btn black white-text">
                     </div>
                 </form>
                 

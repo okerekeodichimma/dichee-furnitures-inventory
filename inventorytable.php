@@ -2,8 +2,11 @@
 //COnnect to database
 include('templates/connect.php');
 
+
+
+
     //write the query
-    $select_single_data = "SELECT * FROM `inventory_tb` ";
+    $select_single_data = "SELECT * FROM `inventory_tb`";
 
     //send query to db
     $send_query = mysqli_query($connect, $select_single_data);
@@ -12,35 +15,24 @@ include('templates/connect.php');
 
     $furnitures= mysqli_fetch_all($send_query,MYSQLI_ASSOC);
 
+
     //close the connection
-    mysqli_close($connect);
+    mysqli_close($connect); 
 
     //print_r($furnitures);
-
-    //Start a session
-session_start();
+ 
+ //Start a session
+ session_start();
 
 //Redirect users to login page if they try to access landing page
 if(!$_SESSION['username']){
   header('Location: login.php');
 }
+
+
+
+
 ?>
-
-
-    <script>        
-
-        var duration  = ; //10 seconds to milliseconds
-
-        setTimeout(logout, duration);
-        
-        function logout() {
-            // Redirect the user to a logout page 
-            alert('Session expired, login again')
-            window.location.href = 'logout.php';
-        }
-  
-    </script>
-
 
 
 
@@ -57,10 +49,7 @@ if(!$_SESSION['username']){
         }
     </style>
 </head>
-
-<form action="inventory.php" method="POST" class='right'>
-    <input type="submit" value="logout" name="logout" class="btn btn-flat grey black-text">
-</form>
+<a href="logout.php" class="btn grey black-text right">Logout</a>
 <body class='ash'>
 <h6>Welcome back <?php echo $_SESSION['username'];?></h6>
 
@@ -77,6 +66,8 @@ if(!$_SESSION['username']){
                     <th>S/N</th>
                     <th>PRODUCT NAME</th>
                     <th>QUANTITY IN STOCK</th>
+                    <th>UNIT PRICE</th>
+                    <th>STOCK VALUE</th>
                     
                 </tr>
                 
@@ -87,6 +78,9 @@ if(!$_SESSION['username']){
                     <td><?php echo $furniture['id'] ?></td>
                     <td><?php echo $furniture['product_name'] ?></td>
                     <td><?php echo $furniture['quantity_instock'] ?></td>
+                    <td><?php echo $furniture['unit_price'] ?></td>
+                    <td><?php echo $furniture['stock_value'] ?></td>
+    
     
                 </tr>
                 <?php } ?>
