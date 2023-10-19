@@ -5,36 +5,58 @@ $customer_name ='';
 $product_name ='';
 $quantity_purchased='';
 $stock_value='';
-$total_cost='';
+$total_cost= '';
+
 
 //check if the submit button is clicked
 if(isset($_POST['submit'])){
+    //take record of the inputs
     $customer_name=$_POST['customer_name'];
     $product_name=$_POST['product_name'];
     $quantity_purchased=$_POST['quantity_purchased'];
+    
     //write query
     $save_query="INSERT INTO `invoice_tb`(`customer_name`, `product_name`, `quantity_purchased`) VALUES ('$customer_name','$product_name','$quantity_purchased')";
-    
-    //send query to server
-    $send_to_server=mysqli_query($connect,$save_query);
-    $output=mysqli_fetch_assoc($send_to_server);
 
-    if($send_to_server){
-        header('Location:viewinvoices.php');
-    }else{
-        echo'Error to save data'.mysqli_error(($connect));
-    }
-   
+    $send_to_server = mysqli_query($connect, $save_query);
+
+    $select="SELECT `quantity_instock` FROM `inventory_tb` WHERE product_name='$product_name'";
+    $send=mysqli_query($connect,$select);
+    $getresult=mysqli_fetch_assoc('$send');
+    
+    
+    $quantity_in_stock=$getresult['quantity_instock'];
+    $new_quantityinstock=$quantity_in_stock - $quantity_purchased;
+    
+    //print_r($new_quantityinstock);
+
+    $update="UPDATE `inventory_tb` SET `quantity_instock`='$new_quantityinstock' WHERE product_name='$product_name'";
+    $send1=mysqli_query($connect,$update);
+    $result1=mysql_fetch_assoc('$send1');
+    
+
+  
+
+
+
+    //check if query data was sent to db
+     
+if($send_to_server){
+    header('Location: viewinvoices.php');
+} else {
+    echo 'Error to save data' . mysqli_error(($connect));
+}
 }
 
 
 //Start a session
 session_start();
 
-//Redirect users to login page if they try to access landing page
+//Redirect to login page if they try to access landing page
 if(!$_SESSION['username']){
     header('Location: login.php');
 }
+mysqli_close($connect);
 ?>
 
 

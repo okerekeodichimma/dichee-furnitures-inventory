@@ -4,7 +4,7 @@ include('templates/connect.php');
 
 
     //write the query
-    $select_single_data = "SELECT * FROM `invoice_tb`";
+    $select_single_data = "SELECT * FROM `invoice_tb` ";
     
     //send query to db
     $send_query = mysqli_query($connect, $select_single_data);
