@@ -54,13 +54,13 @@ if(!$_SESSION['username']){
 <h6>Welcome back <?php echo $_SESSION['username'];?></h6>
 
     <h2 class="center-align">OUR INVENTORY</h2>
-    <div class="container grey ">
+    <div class="container grey s12 l4">
         <div class="buttons container grey" >
             <a href="viewinvoices.php"><button>view invoices</button></a>
             <a href="invoiceform.php"><button>create invoice</button></a>
         </div>
         <br>
-        <table class="striped">
+        <table class=" s12 l4 striped">
             <thead >
                 <tr>
                     <th>S/N</th>
@@ -72,7 +72,8 @@ if(!$_SESSION['username']){
                 </tr>
                 
             </thead>
-            <tbody>
+            <tbody class='col s12 l4'>
+
                 <?php foreach ($furnitures as $furniture){?>
                 <tr>
                     <td><?php echo $furniture['id'] ?></td>
