@@ -4,6 +4,8 @@ include('templates/connect.php');
 $customer_name ='';
 $product_name ='';
 $quantity_purchased='';
+$stock_value='';
+$total_cost='';
 
 //check if the submit button is clicked
 if(isset($_POST['submit'])){
@@ -24,7 +26,6 @@ if(isset($_POST['submit'])){
     }
    
 }
-
 
 
 //Start a session
