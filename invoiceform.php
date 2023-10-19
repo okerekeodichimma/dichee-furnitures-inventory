@@ -11,36 +11,21 @@ if(isset($_POST['submit'])){
     $product_name=$_POST['product_name'];
     $quantity_purchased=$_POST['quantity_purchased'];
     //write query
-    $save_query="INSERT INTO `invoice_tb`(`customer_name`,`product_name`,`quantity_purchased`) VALUES ('$customer_name','$product_name','$quantity_purchased')";
+    $save_query="INSERT INTO `invoice_tb`(`customer_name`, `product_name`, `quantity_purchased`) VALUES ('$customer_name','$product_name','$quantity_purchased')";
     
     //send query to server
     $send_to_server=mysqli_query($connect,$save_query);
     $output=mysqli_fetch_assoc($send_to_server);
 
-    //sql query 
-    $update="SELECT `quantity_instock` FROM `inventory_tb` WHERE product_name ='$product_name'";
-    //run the query
-    $run_query=mysqli_query($connect,$update);
-    //receive result
-    $result=mysqli_fetch_assoc($run_query);
-    //print_r($result);
-    //update product quantity
-    $quantity_in_stock=$result['quantity_instock'];
-    $new_qty_in_stock = $quantity_in_stock - $quantity_purchased;
-    
-    
-    $updates = "UPDATE `inventory_tb` SET `quantity_instock`= '$new_qty_in_stock' WHERE product_name='$product_name'";
-    $send=mysqli_query($connect,$updates);
-    $out=mysqli_fetch_assoc($send);
-    //print_r($out);
+    if($send_to_server){
+        header('Location:viewinvoices.php');
+    }else{
+        echo'Error to save data'.mysqli_error(($connect));
+    }
+   
 }
 
-//check if the data is savedto db
-if($send_to_server){
-    header('Location:viewinvoices.php');
-}else{
-    echo'Error to save data'.mysqli_error(($connect));
-}
+
 
 //Start a session
 session_start();
