@@ -80,7 +80,7 @@ if(!$_SESSION['username']){
                     <td><?php echo $furniture['product_name'] ?></td>
                     <td><?php echo $furniture['quantity_instock'] ?></td>
                     <td><?php echo $furniture['unit_price'] ?></td>
-                    <td><?php echo $furniture['stock_value'] ?></td>
+                    <td><?php echo $furniture['unit_price'] * $furniture['quantity_instock'] ?></td>
     
     
                 </tr>

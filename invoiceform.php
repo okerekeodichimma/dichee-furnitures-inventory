@@ -14,15 +14,24 @@ if(isset($_POST['submit'])){
     $customer_name=$_POST['customer_name'];
     $product_name=$_POST['product_name'];
     $quantity_purchased=$_POST['quantity_purchased'];
+
+    //Get Unit price 
+    $select="SELECT `unit_price` FROM `inventory_tb` WHERE product_name='$product_name'";
+    $send=mysqli_query($connect,$select);
+    $getresult=mysqli_fetch_assoc($send);
+    $unit =  $getresult['unit_price'];
     
+    //Calculate total cost
+    $total = $unit * $quantity_purchased;
+
     //write query
-    $save_query="INSERT INTO `invoice_tb`(`customer_name`, `product_name`, `quantity_purchased`) VALUES ('$customer_name','$product_name','$quantity_purchased')";
+    $save_query="INSERT INTO invoice_tb(`customer_name`, `product_name`, `quantity_purchased`,`total_cost`) VALUES ('$customer_name','$product_name','$quantity_purchased','$total')";
 
     $send_to_server = mysqli_query($connect, $save_query);
 
     $select="SELECT `quantity_instock` FROM `inventory_tb` WHERE product_name='$product_name'";
     $send=mysqli_query($connect,$select);
-    $getresult=mysqli_fetch_assoc('$send');
+    $getresult=mysqli_fetch_assoc($send);
     
     
     $quantity_in_stock=$getresult['quantity_instock'];
@@ -32,7 +41,7 @@ if(isset($_POST['submit'])){
 
     $update="UPDATE `inventory_tb` SET `quantity_instock`='$new_quantityinstock' WHERE product_name='$product_name'";
     $send1=mysqli_query($connect,$update);
-    $result1=mysql_fetch_assoc('$send1');
+    // $result1=mysqli_fetch_assoc($send1);
     
 
   
@@ -94,7 +103,7 @@ mysqli_close($connect);
                     <label for="customer_name" class="black-text">CUSTOMER NAME:</label>
                 </div>
                 <div class="col s12 input-field black-text">
-                    <input type="text" name='product_name' required id="product_name">
+                    <input type="text" name="product_name" required id="product_name">
                     <label for="product_name" class="black-text">PRODUCT NAME:</label>
                 </div>
                 <div class="col s12 input-field black-text">
